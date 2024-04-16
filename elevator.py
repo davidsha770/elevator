@@ -12,6 +12,7 @@ class Elevator:
         self.floor_height = height
         self.move_speed = 0.5  # Floors per second
         self.time_elapsed = 0
+        self.time_stay = 0
         self.q = queue.Queue()
         self.direction = "place"
         self.stay = False
@@ -32,13 +33,17 @@ class Elevator:
         return 0
     
     def stay_in_floor(self, current_time, last_time):
-        self.time_elapsed += current_time - last_time
-        if self.time_elapsed >= 2:
+        self.time_stay += current_time - last_time
+        if self.time_stay >= 2:
             self.stay = False
-            self.time_elapsed = 0
+            self.time_stay = 0
 
 
     def manager(self, height_floor, current_time, last_time):
+        if self.time_elapsed > 0:
+            self.add_time(last_time-current_time)
+        else:
+            self.time_elapsed = 0
         if self.stay == True:
             self.stay_in_floor(current_time, last_time)
         elif self.direction != "place":
@@ -54,3 +59,8 @@ class Elevator:
                 self.direction = "down" 
         return -1
     
+    def add_to_queue(self, number):
+        self.q.put(number)
+
+    def add_time(self, number):
+        self.time_elapsed += number

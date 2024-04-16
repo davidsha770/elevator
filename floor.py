@@ -58,3 +58,6 @@ class Floor:
     def no_pressed(self):
         self.number_color = (0, 0, 0)
         self.press = False
+
+    def get_rect(self):
+        return self.rect
