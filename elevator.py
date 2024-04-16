@@ -6,6 +6,7 @@ class Elevator:
     def __init__(self, height, width, height_screen, x):
         self.image = pygame.image.load("elv.png")
         self.image = pygame.transform.scale(self.image, (width ,height))
+        self.ring = pygame.mixer.music.load("ding.mp3")
         self.floor = 0
         self.location = (x, height_screen - self.image.get_rect().height)
         self.target_floor = 0
@@ -46,7 +47,8 @@ class Elevator:
             self.stay_in_floor(current_time)
         elif self.direction != "place":
             if self.move(current_time, height_floor):
-                self.last_move_time = current_time 
+                self.last_move_time = current_time
+                pygame.mixer.music.play()
                 return self.target_floor
         elif self.q.empty() == False:
             self.floor = self.target_floor
