@@ -26,11 +26,14 @@ class Building:
     def check_click(self, mouse_pos):
         for floor in self.floors:
             check = floor.check_click(mouse_pos)
-            if check != -1:
+            if check == floor.number:
                 min_time = float('inf')
                 min_elv = 0
                 for elv in self.elevators:
                     time_elv = elv.calculate_time(check)
+                    if elv.target_floor == check:
+                        self.floors[check].no_pressed()
+                        return
                     if time_elv < min_time:
                         min_time = time_elv
                         min_elv = elv.number
