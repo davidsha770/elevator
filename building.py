@@ -39,6 +39,7 @@ class Building:
                         min_elv = elv.number
 
                 self.elevators[min_elv].add_to_queue(check)
+                self.floors[check].add_to_time(min_time)
                 return
             
             
@@ -50,4 +51,6 @@ class Building:
             floor = elv.manager(height_floor, current_time, self.last_time)
             if floor != -1:
                 self.floors[floor].no_pressed()
+        for floor in self.floors:
+            floor.timer(current_time, self.last_time)
         self.last_time = current_time
