@@ -71,4 +71,4 @@ class Elevator:
         self.time_elapsed += number
 
     def calculate_time(self, floor):
-        return self.time_elapsed + abs(floor - self.last_floor)
+        return self.time_elapsed + abs(floor - self.last_floor)/2

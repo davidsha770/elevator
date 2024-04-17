@@ -31,14 +31,11 @@ class Building:
                 min_elv = 0
                 for elv in self.elevators:
                     time_elv = elv.calculate_time(check)
-                    print(f"elv = {elv.number}, time = {time_elv}")
                     if time_elv < min_time:
                         min_time = time_elv
                         min_elv = elv.number
 
-                time_to_add = abs(check - self.elevators[min_elv].target_floor)/2 + 2.0
                 self.elevators[min_elv].add_to_queue(check)
-                self.elevators[min_elv].add_time(time_to_add)
                 return
             
             
