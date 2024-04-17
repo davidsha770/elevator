@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((width_screen, height_screen))
 clock = pygame.time.Clock()
 pygame.display.set_caption("Building Floors")
 
-building = Building(22, 100, 30, height_screen)
+building = Building(22, 3, 100, 30, height_screen)
 
 # Main loop
 running = True

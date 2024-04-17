@@ -2,10 +2,11 @@ import pygame
 import queue
 
 class Elevator:
-    def __init__(self, height, width, height_screen, x):
+    def __init__(self, number, height, width, height_screen, x):
         self.image = pygame.image.load("elv.png")
         self.image = pygame.transform.scale(self.image, (width ,height))
         self.ring = pygame.mixer.music.load("ding.mp3")
+        self.number = number
         self.floor = 0
         self.location = (x, height_screen - self.image.get_rect().height)
         self.target_floor = 0
@@ -13,7 +14,8 @@ class Elevator:
         self.move_speed = 0.5  # Floors per second
         self.time_elapsed = 0
         self.time_stay = 0
-        self.q = queue.Queue()
+        self.queue = queue.Queue()
+        self.last_floor = 0
         self.direction = "place"
         self.stay = False
 
@@ -50,9 +52,9 @@ class Elevator:
             if self.move(current_time, last_time, height_floor):
                 pygame.mixer.music.play()
                 return self.target_floor
-        elif self.q.empty() == False:
+        elif self.queue.empty() == False:
             self.floor = self.target_floor
-            self.target_floor = self.q.get()
+            self.target_floor = self.queue.get()
             if self.floor < self.target_floor:
                 self.direction = "up"
             else:
@@ -60,7 +62,13 @@ class Elevator:
         return -1
     
     def add_to_queue(self, number):
-        self.q.put(number)
-
+        self.queue.put(number)
+        self.last_floor = number
+        time_to_add = abs(number - self.target_floor) * self.move_speed + 2
+        self.add_time(time_to_add)
+ 
     def add_time(self, number):
         self.time_elapsed += number
+
+    def calculate_time(self, floor):
+        return self.time_elapsed + abs(floor - self.last_floor)
