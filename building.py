@@ -23,34 +23,34 @@ class Building:
         for elv in self.elevators:
             elv.draw(surface)
 
-    def check_click(self, mouse_pos):
+    def process_floor_click(self, mouse_pos):
         for floor in self.floors:
-            check = floor.check_click(mouse_pos)
+            check = floor.process_click(mouse_pos)
             if check == floor.number:
                 min_time = float('inf')
                 min_elv = 0
                 for elv in self.elevators:
                     time_elv = elv.calculate_time(check)
                     if elv.target_floor == check:
-                        self.floors[check].no_pressed()
+                        self.floors[check].reset_pressed_state()
                         return
                     if time_elv < min_time:
                         min_time = time_elv
                         min_elv = elv.number
 
                 self.elevators[min_elv].add_to_queue(check)
-                self.floors[check].add_to_time(min_time)
+                self.floors[check].increment_timer(min_time)
                 return
             
             
-    def manager(self):
+    def process_elevator_movement(self):
         current_time = pygame.time.get_ticks() / 1000 #in second
         for elv in self.elevators:
             tarrget_floor = elv.target_floor
             height_floor = self.floors[tarrget_floor].get_rect().top
-            floor = elv.manager(height_floor, current_time, self.last_time)
+            floor = elv.process_movement(height_floor, current_time, self.last_time)
             if floor != -1:
-                self.floors[floor].no_pressed()
+                self.floors[floor].reset_pressed_state()
         for floor in self.floors:
             floor.timer(current_time, self.last_time)
         self.last_time = current_time

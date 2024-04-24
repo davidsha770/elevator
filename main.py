@@ -25,12 +25,12 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Check if left mouse button is pressed
             if event.button == 1:
-                building.check_click(pygame.mouse.get_pos())
+                building.process_floor_click(pygame.mouse.get_pos())
 
     # Draw the floors
     screen.fill((255, 255, 255))  # Fill the screen with white
     building.draw(screen)
-    building.manager()
+    building.process_elevator_movement()
 
     # Update the display
     pygame.display.flip()

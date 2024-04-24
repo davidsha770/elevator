@@ -11,60 +11,60 @@ class Elevator:
         self.location = (x, height_screen - self.image.get_rect().height)
         self.target_floor = 0
         self.floor_height = height
-        self.move_speed = 0.5  # Floors per second
+        self.elevator_speed = 0.5  # Floors per second
         self.time_elapsed = 0
-        self.time_stay = 0
+        self.stay_time = 0
         self.queue = queue.Queue()
         self.last_floor = 0
-        self.direction = "place"
+        self.travel_direction = "place"
         self.stay = False
 
     def draw(self, surface):
         surface.blit(self.image, self.location)
 
-    def move(self, current_time, last_time, height_floor):
-        distance_to_move = (current_time - last_time) * self.floor_height / self.move_speed
-        if self.direction == "up" and self.location[1] > height_floor:
+    def update_position(self, current_time, last_time, height_floor):
+        distance_to_move = (current_time - last_time) * self.floor_height / self.elevator_speed
+        if self.travel_direction == "up" and self.location[1] > height_floor:
             self.location = (self.location[0], self.location[1] - distance_to_move)
-        elif self.direction == "down" and self.location[1] < height_floor:
+        elif self.travel_direction == "down" and self.location[1] < height_floor:
             self.location = (self.location[0], self.location[1] + distance_to_move)
         else:
-            self.direction = "place"
+            self.travel_direction = "place"
             self.stay = True
             return 1
         return 0
     
-    def stay_in_floor(self, current_time, last_time):
-        self.time_stay += current_time - last_time
-        if self.time_stay >= 2:
+    def adjust_stay_time(self, current_time, last_time):
+        self.stay_time += current_time - last_time
+        if self.stay_time >= 2:
             self.stay = False
-            self.time_stay = 0
+            self.stay_time = 0
 
 
-    def manager(self, height_floor, current_time, last_time):
+    def process_movement(self, height_floor, current_time, last_time):
         if self.time_elapsed > 0:
             self.add_time(last_time-current_time)
         else:
             self.time_elapsed = 0
         if self.stay == True:
-            self.stay_in_floor(current_time, last_time)
-        elif self.direction != "place":
-            if self.move(current_time, last_time, height_floor):
+            self.adjust_stay_time(current_time, last_time)
+        elif self.travel_direction != "place":
+            if self.update_position(current_time, last_time, height_floor):
                 pygame.mixer.music.play()
                 return self.target_floor
         elif self.queue.empty() == False:
             self.floor = self.target_floor
             self.target_floor = self.queue.get()
             if self.floor < self.target_floor:
-                self.direction = "up"
+                self.travel_direction = "up"
             else:
-                self.direction = "down" 
+                self.travel_direction = "down" 
         return -1
     
     def add_to_queue(self, number):
         self.queue.put(number)
         self.last_floor = number
-        time_to_add = abs(number - self.target_floor) * self.move_speed + 2
+        time_to_add = abs(number - self.target_floor) * self.elevator_speed + 2
         self.add_time(time_to_add)
  
     def add_time(self, number):
