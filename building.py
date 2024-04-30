@@ -49,8 +49,6 @@ class Building:
             tarrget_floor = elv.target_floor
             height_floor = self.floors[tarrget_floor].get_rect().top
             floor = elv.process_movement(height_floor, current_time, self.last_time)
-            if floor != -1:
-                self.floors[floor].reset_pressed_state()
         for floor in self.floors:
             floor.timer(current_time, self.last_time)
         self.last_time = current_time

@@ -45,10 +45,12 @@ class Floor:
         number_rect_width = 20
         number_rect_height = 16
         if self.time > 0:
+            self.number_color = (0, 255, 0)
             number_rect_position = pygame.Rect(self.rect.right - number_rect_width - 10,
                                     self.rect.centery - (number_rect_height / 2),
                                     number_rect_width, number_rect_height)
         else:
+            self.number_color = (0, 0, 0)
             number_rect_position = pygame.Rect(self.rect.centerx - (number_rect_width / 2),
                                     self.rect.centery - (number_rect_height / 2),
                                     number_rect_width, number_rect_height)
@@ -65,17 +67,8 @@ class Floor:
 
     def process_click(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos) and self.press == False:
-            self.set_pressed_state()
             return self.number
         return -1
-
-    def set_pressed_state(self):
-        self.press = True
-        self.number_color = (0, 255, 0)
-
-    def reset_pressed_state(self):
-        self.number_color = (0, 0, 0)
-        self.press = False
 
     def get_rect(self):
         return self.rect

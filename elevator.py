@@ -63,8 +63,8 @@ class Elevator:
     
     def add_to_queue(self, number):
         self.queue.put(number)
+        time_to_add = abs(number - self.last_floor) * self.elevator_speed + 2
         self.last_floor = number
-        time_to_add = abs(number - self.target_floor) * self.elevator_speed + 2
         self.add_time(time_to_add)
  
     def add_time(self, number):
