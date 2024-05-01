@@ -32,7 +32,6 @@ class Building:
                 for elv in self.elevators:
                     time_elv = elv.calculate_time(check)
                     if elv.target_floor == check:
-                        self.floors[check].reset_pressed_state()
                         return
                     if time_elv < min_time:
                         min_time = time_elv
