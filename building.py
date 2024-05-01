@@ -1,20 +1,19 @@
 import pygame
-from floor import Floor
-from elevator import Elevator
 
 class Building:
     def __init__(self, position, num_floors, num_elevators, floor_width, floor_height, height_screen):        
+        from factory import factory
         self.last_time = pygame.time.get_ticks() / 1000 #in second
         self.num_floors = num_floors
         self.floor_width = floor_width
         self.floor_height = floor_height
         self.elevators = []
         for i in range(num_elevators):
-            elv = Elevator(i, floor_height, floor_width/2 , height_screen, floor_width * (i/2 +1) + position)
+            elv = factory("elevator", i, floor_height, floor_width/2 , height_screen, floor_width * (i/2 +1) + position)
             self.elevators.append(elv)
         self.floors = []
         for i in range(num_floors+1):
-            floor = Floor(i, position, height_screen - (i + 1) * floor_height, floor_width, floor_height)
+            floor = factory("floor", i, position, height_screen - (i + 1) * floor_height, floor_width, floor_height)
             self.floors.append(floor)
 
     def draw(self, surface):

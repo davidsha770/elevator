@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random
-from building import Building
+from factory import factory
 
 height_screen = 700
 width_screen = 1000
@@ -20,7 +20,8 @@ def create_buildings():
     for i in range(num_buildings):
         position = 10 + i * width_floor * 3
         floors = random.randint(10, 20)
-        building = Building(position, floors, 3, width_floor, height_floor, height_screen)
+        num_elevators = 3
+        building = factory("building", position, floors, num_elevators, width_floor, height_floor, height_screen)
         street.append(building)
     return street
 
