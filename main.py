@@ -3,48 +3,55 @@ import sys
 import random
 from building import Building
 
-# Initialize Pygame
-pygame.init()
-
-
-# Set up the display
 height_screen = 700
 width_screen = 1000
 height_floor = 30
 width_floor = 100
-screen = pygame.display.set_mode((width_screen, height_screen))
-clock = pygame.time.Clock()
-pygame.display.set_caption("Building Floors")
+num_buildings = 3
 
-street = []
+def initialize_pygame():
+    pygame.init()
+    screen = pygame.display.set_mode((width_screen, height_screen))
+    pygame.display.set_caption("Building Floors")
+    return screen
 
-for i in range(3):
-    building = Building(10 + i * width_floor * 3 , random.randint(10, 20), 3, width_floor, height_floor, height_screen)
-    street.append(building)
+def create_buildings():
+    street = []
+    for i in range(num_buildings):
+        position = 10 + i * width_floor * 3
+        floors = random.randint(10, 20)
+        building = Building(position, floors, 3, width_floor, height_floor, height_screen)
+        street.append(building)
+    return street
 
-# Main loop
-running = True
-while running:
-    # Handle events
+def handle_events(street):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Check if left mouse button is pressed
-            if event.button == 1:
-                for building in street:
-                    building.process_floor_click(pygame.mouse.get_pos())
+            return False
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for building in street:
+                building.process_floor_click(pygame.mouse.get_pos())
+    return True
 
-    # Draw the floors
+def draw_screen(screen, street):
     screen.fill((255, 255, 255))  # Fill the screen with white
     for building in street:
         building.draw(screen)
         building.process_elevator_movement()
-
-    # Update the display
     pygame.display.flip()
-    clock.tick(60)
 
-# Quit Pygame
-pygame.quit()
-sys.exit()
+def main():
+    screen = initialize_pygame()
+    street = create_buildings()
+    clock = pygame.time.Clock()
+
+    running = True
+    while running:
+        running = handle_events(street)
+        draw_screen(screen, street)
+        clock.tick(60)
+
+    pygame.quit()
+    sys.exit()
+
+main()
