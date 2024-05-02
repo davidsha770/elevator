@@ -3,7 +3,6 @@ import pygame
 class Floor:
     def __init__(self, number, x, y, width, height):
         self.number = number
-        self.press = False
         self.rect = pygame.Rect(x, y, width, height)
         self.color = (192, 192, 192)
         self.brick_color = (255, 0, 0)
@@ -72,7 +71,7 @@ class Floor:
         surface.blit(timer_text, timer_rect)
 
     def process_click(self, mouse_pos):
-        if self.rect.collidepoint(mouse_pos) and self.press == False:
+        if self.rect.collidepoint(mouse_pos) and self.time <= 0:
             return self.number
         return -1
 
