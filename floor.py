@@ -41,7 +41,7 @@ class Floor:
     def draw_number(self, surface):
         # Calculate position and color settings
         number_rect_width, number_rect_height = 20, 16
-        number_rect_position, self.number_color = self._calculate_number_position(number_rect_width, number_rect_height)
+        number_rect_position, self.number_color = self.calculate_number_position(number_rect_width, number_rect_height)
 
         # Draw the background rectangle for the number
         pygame.draw.rect(surface, (192, 192, 192), number_rect_position)
@@ -51,7 +51,7 @@ class Floor:
         text_rect = number_text.get_rect(center=number_rect_position.center)
         surface.blit(number_text, text_rect)
 
-    def _calculate_number_position(self, width, height):
+    def calculate_number_position(self, width, height):
         # Determine color and position based on the timer state
         if self.time > 0:
             color = (0, 255, 0)
@@ -70,7 +70,7 @@ class Floor:
         timer_rect = timer_text.get_rect(center=(self.rect.left + 20, self.rect.centery))
         surface.blit(timer_text, timer_rect)
 
-    def process_click(self, mouse_pos):
+    def handle_events(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos) and self.time <= 0:
             return self.number
         return -1

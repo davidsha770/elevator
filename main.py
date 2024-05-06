@@ -1,13 +1,11 @@
 import pygame
 import sys
-import random
-from factory import factory
+from street import Street
 
 height_screen = 700
-width_screen = 1000
-height_floor = 30
-width_floor = 100
-num_buildings = 3
+width_screen = 1200
+# buidings_info: the first is sum of floors, the second is sum of elevators
+buidings_info = [[15, 3], [10, 2], [20, 4]]
 
 def initialize_pygame():
     pygame.init()
@@ -15,35 +13,22 @@ def initialize_pygame():
     pygame.display.set_caption("Building Floors")
     return screen
 
-def create_buildings():
-    street = []
-    for i in range(num_buildings):
-        position = 10 + i * width_floor * 3
-        floors = random.randint(10, 20)
-        num_elevators = 3
-        building = factory("building", position, floors, num_elevators, width_floor, height_floor, height_screen)
-        street.append(building)
-    return street
-
 def handle_events(street):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            for building in street:
-                building.process_floor_click(pygame.mouse.get_pos())
+            street.handle_events(pygame.mouse.get_pos())
     return True
 
 def draw_screen(screen, street):
     screen.fill((255, 255, 255))  # Fill the screen with white
-    for building in street:
-        building.draw(screen)
-        building.process_elevator_movement()
+    street.draw(screen)
     pygame.display.flip()
 
 def main():
     screen = initialize_pygame()
-    street = create_buildings()
+    street = Street(buidings_info, height_screen, width_screen)
     clock = pygame.time.Clock()
 
     running = True
