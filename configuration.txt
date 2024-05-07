@@ -1,0 +1,9 @@
+[Settings]
+height_screen = 700
+width_screen = 1200
+
+[Buildings]
+# Format: floors, elevators
+building1 = 15, 3
+building2 = 10, 2
+building3 = 20, 4

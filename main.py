@@ -1,13 +1,23 @@
 import pygame
 import sys
+import configparser
 from street import Street
 
-height_screen = 700
-width_screen = 1200
-# buidings_info: the first is sum of floors, the second is sum of elevators
-buidings_info = [[15, 3], [10, 2], [20, 4]]
+def load_config(filename):
+    config = configparser.ConfigParser()
+    config.read(filename)
+    
+    height_screen = config.getint('Settings', 'height_screen')
+    width_screen = config.getint('Settings', 'width_screen')
+    
+    buildings_info = []
+    for key in config['Buildings']:
+        floors, elevators = map(int, config['Buildings'][key].split(','))
+        buildings_info.append([floors, elevators])
+    
+    return height_screen, width_screen, buildings_info
 
-def initialize_pygame():
+def initialize_pygame(width_screen, height_screen):
     pygame.init()
     screen = pygame.display.set_mode((width_screen, height_screen))
     pygame.display.set_caption("Building Floors")
@@ -27,8 +37,9 @@ def draw_screen(screen, street):
     pygame.display.flip()
 
 def main():
-    screen = initialize_pygame()
-    street = Street(buidings_info, height_screen, width_screen)
+    height_screen, width_screen, buildings_info = load_config('configuration.txt')
+    screen = initialize_pygame(width_screen, height_screen)
+    street = Street(buildings_info, height_screen, width_screen)
     clock = pygame.time.Clock()
 
     running = True
