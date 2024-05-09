@@ -15,7 +15,9 @@ class Street:
         count = 0
         for floors, elevators in buildings_info:
             position = width_screen / sum_elevators * count + 10
-            building = factory("building", position, floors, elevators, (width_screen - 20) / sum_elevators, (height_screen-10) / max_floor, height_screen)
+            floor_width = min((width_screen - 20) / sum_elevators, 150)
+            floor_height = min((height_screen-10) / max_floor, 30)
+            building = factory("building", position, floors, elevators, floor_width, floor_height, height_screen)
             self.buildings.append(building)
             count += elevators / 2 + 1
 
