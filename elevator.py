@@ -56,7 +56,6 @@ class Elevator:
         elif self.travel_direction != Direction.PLACE:
             if self.update_position(current_time, last_time, height_floor):
                 pygame.mixer.music.play()
-                return self.target_floor
         elif not self.queue.empty():
             self.floor = self.target_floor
             self.target_floor = self.queue.get()
@@ -64,7 +63,6 @@ class Elevator:
                 self.travel_direction = Direction.UP
             else:
                 self.travel_direction = Direction.DOWN
-        return -1
 
     def add_to_queue(self, number):
         self.queue.put(number)

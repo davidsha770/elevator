@@ -45,7 +45,7 @@ class Building:
         for elv in self.elevators:
             tarrget_floor = elv.target_floor
             height_floor = self.floors[tarrget_floor].get_rect().top
-            floor = elv.process_movement(height_floor, current_time, self.last_time)
+            elv.process_movement(height_floor, current_time, self.last_time)
         for floor in self.floors:
             floor.timer(current_time, self.last_time)
         self.last_time = current_time
