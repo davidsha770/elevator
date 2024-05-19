@@ -1,18 +1,23 @@
+# Building class to represent a single building with floors and elevators
 import pygame
 
 class Building:
     def __init__(self, position, num_floors, num_elevators, floor_width, floor_height, height_screen):        
         from factory import factory
-        self.last_time = pygame.time.get_ticks() / 1000 #in second
+        self.last_time = pygame.time.get_ticks() / 1000  # in seconds
         self.num_floors = num_floors
         self.floor_width = floor_width
         self.floor_height = floor_height
         self.elevators = []
+        
+        # Create elevators
         for i in range(num_elevators):
-            elv = factory("elevator", i, floor_height, floor_width/2 , height_screen, floor_width * (i/2 +1) + position)
+            elv = factory("elevator", i, floor_height, floor_width / 2, height_screen, floor_width * (i / 2 + 1) + position)
             self.elevators.append(elv)
+        
+        # Create floors
         self.floors = []
-        for i in range(num_floors+1):
+        for i in range(num_floors + 1):
             floor = factory("floor", i, position, height_screen - (i + 1) * floor_height, floor_width, floor_height)
             self.floors.append(floor)
 
@@ -41,10 +46,10 @@ class Building:
                 return
                         
     def process_elevator_movement(self):
-        current_time = pygame.time.get_ticks() / 1000 #in second
+        current_time = pygame.time.get_ticks() / 1000  # in seconds
         for elv in self.elevators:
-            tarrget_floor = elv.target_floor
-            height_floor = self.floors[tarrget_floor].get_rect().top
+            target_floor = elv.target_floor
+            height_floor = self.floors[target_floor].get_rect().top
             elv.process_movement(height_floor, current_time, self.last_time)
         for floor in self.floors:
             floor.timer(current_time, self.last_time)

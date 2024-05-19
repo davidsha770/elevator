@@ -1,3 +1,4 @@
+# Factory function to create objects of different types
 from building import Building
 from floor import Floor
 from elevator import Elevator

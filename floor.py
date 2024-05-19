@@ -13,6 +13,7 @@ class Floor:
         self.time = 0
 
     def draw(self, surface):
+        # Draw bricks, black line, floor number, and timer if active
         self.draw_bricks(surface)
         self.draw_black_line(surface)
         self.draw_number(surface)
@@ -20,13 +21,14 @@ class Floor:
             self.draw_timer(surface)
 
     def draw_bricks(self, surface):
+        # Draw a brick pattern on the floor
         pygame.draw.rect(surface, self.color, self.rect)
         brick_width = 4
         brick_height = 2
         spacing = 1
         i = 0
         for row in range(0, self.rect.height - brick_height, brick_height + spacing):
-            # Adjust col start based on the row index to create a staggered brick pattern
+            # Adjust column start based on the row index to create a staggered brick pattern
             col_start = int(brick_width / 2) if i % 2 == 0 else 0
             for col in range(col_start, self.rect.width - brick_width, brick_width + spacing):
                 brick_rect = pygame.Rect(self.rect.left + col, self.rect.top + row, brick_width, brick_height)
@@ -34,12 +36,13 @@ class Floor:
             i += 1
 
     def draw_black_line(self, surface):
+        # Draw a black line at the bottom of the floor to indicate separation
         line_rect = pygame.Rect(self.rect.left, self.rect.bottom - self.height_black_line, 
                                 self.rect.width, self.height_black_line)
         pygame.draw.rect(surface, self.black_line_color, line_rect)
 
     def draw_number(self, surface):
-        # Calculate position and color settings
+        # Calculate position and color settings for this floor
         number_rect_width, number_rect_height = 20, 16
         number_rect_position, self.number_color = self.calculate_number_position(number_rect_width, number_rect_height)
 
@@ -66,25 +69,30 @@ class Floor:
         return position, color
     
     def draw_timer(self, surface):
+        # Draw the timer if it's active
         timer_text = self.font.render(f"{self.time:.1f}", True, (255, 255, 255))
         timer_rect = timer_text.get_rect(center=(self.rect.left + 20, self.rect.centery))
         surface.blit(timer_text, timer_rect)
 
     def handle_events(self, mouse_pos):
+        # Handle mouse events to detect clicks on the floor
         if self.rect.collidepoint(mouse_pos) and self.time <= 0:
             return self.number
         return -1
 
     def get_rect(self):
+        # Return the rectangle representing the floor's position and size
         return self.rect
 
     def timer(self, current_time, last_time):
+        # Update the timer based on the elapsed time
         if self.time > 0:
-            self.time -= current_time-last_time
+            self.time -= current_time - last_time
         else:
             self.time = 0
 
     def increment_timer(self, time_to_add):
+        # Increment the timer when the elevator arrives at the floor
         if self.time < 0:
             self.time = time_to_add
         else:

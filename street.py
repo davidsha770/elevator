@@ -1,3 +1,4 @@
+# Street class to manage a collection of buildings
 import pygame
 from factory import factory
 
@@ -7,16 +8,19 @@ class Street:
         self.create_buildings(buildings_info, height_screen, width_screen)
 
     def create_buildings(self, buildings_info, height_screen, width_screen):
+        # Calculate total width and max floors for layout
         sum_elevators = 0
         max_floor = 0
         for floors, elevators in buildings_info:
             sum_elevators += elevators / 2 + 1
             max_floor = max(max_floor, floors) + 1
+        
+        # Create each building and position it
         count = 0
         for floors, elevators in buildings_info:
             position = width_screen / sum_elevators * count + 10
             floor_width = min((width_screen - 20) / sum_elevators, 150)
-            floor_height = min((height_screen-10) / max_floor, 30)
+            floor_height = min((height_screen - 10) / max_floor, 30)
             building = factory("building", position, floors, elevators, floor_width, floor_height, height_screen)
             self.buildings.append(building)
             count += elevators / 2 + 1
